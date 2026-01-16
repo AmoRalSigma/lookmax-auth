@@ -21,7 +21,7 @@
             width: 90%;
             max-width: 500px;
             margin-top: 20px;
-            margin-bottom: 80px;
+            padding-bottom: 40px; /* Отступ снизу */
         }
 
         .header {
@@ -52,7 +52,7 @@
             box-sizing: border-box;
         }
 
-        /* Фото и Статус */
+        /* Карточка */
         .profile-card {
             background: #1e1e1e;
             border-radius: 5px;
@@ -111,13 +111,13 @@
 
         .rate-btn:active { background: #555; color: white; }
 
-        /* Цветовые акценты для кнопок (строгие) */
-        .btn-1 { border-bottom: 2px solid #d32f2f; } /* SUB */
-        .btn-2 { border-bottom: 2px solid #e64a19; } /* LTN */
-        .btn-3 { border-bottom: 2px solid #fbc02d; } /* MTN */
-        .btn-4 { border-bottom: 2px solid #afb42b; } /* HTN */
-        .btn-5 { border-bottom: 2px solid #388e3c; } /* ADAM */
-        .btn-6 { border-bottom: 2px solid #1976d2; } /* CHAD */
+        /* Цвета */
+        .btn-1 { border-bottom: 2px solid #d32f2f; }
+        .btn-2 { border-bottom: 2px solid #e64a19; }
+        .btn-3 { border-bottom: 2px solid #fbc02d; }
+        .btn-4 { border-bottom: 2px solid #afb42b; }
+        .btn-5 { border-bottom: 2px solid #388e3c; }
+        .btn-6 { border-bottom: 2px solid #1976d2; }
 
         /* Комментарии */
         .comments-section {
@@ -168,26 +168,23 @@
             margin-bottom: 3px;
         }
 
-        /* Окно участия */
-        .participate-box {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #212121;
-            padding: 12px 25px;
-            border-radius: 30px;
-            border: 1px solid #444;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-            z-index: 1000;
+        /* Простая ссылка внизу */
+        .footer-link {
+            text-align: center;
+            margin-top: 40px;
+        }
+        
+        .footer-link a {
+            color: #666;
+            text-decoration: none;
+            font-size: 0.9em;
+            border-bottom: 1px dashed #444;
+            transition: color 0.3s;
         }
 
-        .participate-link {
-            color: #e0e0e0;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 1em;
-            display: block;
+        .footer-link a:hover {
+            color: #aaa;
+            border-bottom: 1px solid #aaa;
         }
     </style>
 </head>
@@ -229,10 +226,10 @@
             <div class="comments-list" id="commentsList"></div>
         </div>
 
-    </div>
+        <div class="footer-link">
+            <a href="https://t.me/tvoj_bot" target="_blank">Принять участие</a>
+        </div>
 
-    <div class="participate-box">
-        <a href="https://t.me/tvoj_bot" class="participate-link" target="_blank">ПРИНЯТЬ УЧАСТИЕ</a>
     </div>
 
     <script>
@@ -271,7 +268,6 @@
             const avg = totalScore / votesCount;
             let statusText = "";
 
-            // ЛОГИКА ОЦЕНОК (6 уровней)
             if (avg <= 1.5) {
                 statusText = "SUB";
             } else if (avg <= 2.5) {
