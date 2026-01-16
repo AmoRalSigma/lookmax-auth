@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lookmax Community | Soft Blue</title>
+    <link rel="icon" type="image/png" href="https://i.ibb.co/SDTGBKpD/image.png">
+    
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <style>
         :root {
@@ -218,7 +220,6 @@
 <script>
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxxU_p8Zq1KF4MpTqGD42cxVyRYdumsI43lPWGw_BSUspcoHralr2Q2f51Fq8C79pyWyw/exec";
     
-    // Список твоих пацанов
     const candidates = [
         { id: "test1", name: "Alpha Candidate", photo: "test1.jpg" },
         { id: "test2", name: "Bravo Member", photo: "test2.jpg" },
@@ -226,6 +227,7 @@
     ];
 
     let currentUser = null;
+    let userEmail = ""; // Новая переменная для почты
     let currentNick = localStorage.getItem('customNick') || "";
 
     function showToast(m) {
@@ -238,6 +240,7 @@
     function handleCredentialResponse(response) {
         const payload = JSON.parse(atob(response.credential.split('.')[1]));
         currentUser = payload.sub;
+        userEmail = payload.email; // Запоминаем почту из Google
         if (!currentNick) currentNick = payload.name;
         document.getElementById('auth-btn').style.display = 'none';
         document.getElementById('user-info').style.display = 'block';
@@ -291,7 +294,8 @@
         fetch(SCRIPT_URL, {
             method: 'POST',
             mode: 'no-cors',
-            body: JSON.stringify({ type: 'vote', userId: currentUser, targetId: tid, rating: r })
+            // Теперь отправляем и userId, и userEmail
+            body: JSON.stringify({ type: 'vote', userId: currentUser, userEmail: userEmail, targetId: tid, rating: r })
         });
         showToast("Голос засчитан");
     }
@@ -319,7 +323,7 @@
             candidates.forEach(c => {
                 const vs = d.votes.filter(v => v[0] === c.id);
                 if (vs.length > 0) {
-                    const avg = (vs.reduce((a, b) => a + b[1], 0) / vs.length).toFixed(1);
+                    const avg = (vs.reduce((a, b) => a + Number(b[1]), 0) / vs.length).toFixed(1);
                     document.getElementById(`val-${c.id}`).innerText = avg;
                     document.getElementById(`bar-${c.id}`).style.width = (avg / 7 * 100) + "%";
                     
