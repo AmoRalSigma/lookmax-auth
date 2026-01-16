@@ -1,1 +1,223 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZARECHYE ELITE | DATABASE</title>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <style>
+        :root {
+            --bg: #050505;
+            --card-bg: #121212;
+            --gold: #c5a059; /* Премиальное золото */
+            --text: #ffffff;
+            --gray: #888;
+        }
 
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Cinzel', serif, sans-serif; /* Более пафосный шрифт если есть, или стандарт */
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            width: 100%;
+            padding: 60px 0;
+            text-align: center;
+            background: radial-gradient(circle, #1a1a1a 0%, #050505 100%);
+            border-bottom: 1px solid #222;
+        }
+
+        h1 {
+            letter-spacing: 8px;
+            color: var(--gold);
+            text-transform: uppercase;
+            font-size: 2.5rem;
+            margin: 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 90%;
+            padding: 50px 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 40px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 2px; /* Острые углы смотрятся дороже */
+            overflow: hidden;
+            transition: 0.5s ease;
+            border: 1px solid #1a1a1a;
+        }
+
+        .card:hover {
+            border-color: var(--gold);
+            box-shadow: 0 0 40px rgba(197, 160, 89, 0.15);
+        }
+
+        .photo-box {
+            width: 100%;
+            height: 450px;
+            background-size: cover;
+            background-position: center;
+            filter: grayscale(30%); /* Чуть приглушим цвета для стиля */
+            transition: 0.5s;
+        }
+
+        .card:hover .photo-box {
+            filter: grayscale(0%);
+        }
+
+        .info {
+            padding: 25px;
+            text-align: center;
+            border-top: 1px solid #1a1a1a;
+        }
+
+        .name {
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+            color: #fff;
+        }
+
+        .rank-badge {
+            display: inline-block;
+            padding: 4px 20px;
+            font-size: 0.7rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--gold);
+            border: 1px solid var(--gold);
+            margin-bottom: 20px;
+        }
+
+        .rating-box {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .btn-rate {
+            background: transparent;
+            border: 1px solid #333;
+            color: var(--gray);
+            padding: 6px 12px;
+            cursor: pointer;
+            font-size: 0.65rem;
+            transition: 0.3s;
+            text-transform: uppercase;
+        }
+
+        .btn-rate:hover {
+            border-color: var(--gold);
+            color: var(--gold);
+        }
+
+        .auth-overlay {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>ZARECHYE ELITE</h1>
+    <p style="color: var(--gray); font-size: 0.8rem; letter-spacing: 3px; margin-top: 10px;">OFFICIAL LOOKMAXING DATABASE</p>
+    
+    <div class="auth-overlay">
+        <div id="g_id_onload"
+             data-client_id="422243119545-qmkulqdrldj9m1fiijqafq2jr00r1o62.apps.googleusercontent.com"
+             data-callback="handleCredentialResponse">
+        </div>
+        <div class="g_id_signin" data-type="standard" data-theme="outline" data-text="signin_with" data-shape="rectangular" data-logo_alignment="left"></div>
+    </div>
+</header>
+
+<div class="container" id="gallery">
+    <div class="card">
+        <div class="photo-box" style="background-image: url('test1.jpg');"></div>
+        <div class="info">
+            <div class="name">Candidate Alpha</div>
+            <div class="rank-badge">Tier: Analyzing</div>
+            <div class="rating-box">
+                <button class="btn-rate" onclick="vote('test1', 1)">Sub3</button>
+                <button class="btn-rate" onclick="vote('test1', 2)">Sub5</button>
+                <button class="btn-rate" onclick="vote('test1', 3)">LTN</button>
+                <button class="btn-rate" onclick="vote('test1', 4)">MTN</button>
+                <button class="btn-rate" onclick="vote('test1', 5)">HTN</button>
+                <button class="btn-rate" onclick="vote('test1', 6)">CHAD</button>
+                <button class="btn-rate" onclick="vote('test1', 7)">ADAM</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="photo-box" style="background-image: url('test2.jpg');"></div>
+        <div class="info">
+            <div class="name">Candidate Bravo</div>
+            <div class="rank-badge">Tier: Analyzing</div>
+            <div class="rating-box">
+                <button class="btn-rate" onclick="vote('test2', 1)">Sub3</button>
+                <button class="btn-rate" onclick="vote('test2', 3)">LTN</button>
+                <button class="btn-rate" onclick="vote('test2', 4)">MTN</button>
+                <button class="btn-rate" onclick="vote('test2', 5)">HTN</button>
+                <button class="btn-rate" onclick="vote('test2', 6)">CHAD</button>
+                <button class="btn-rate" onclick="vote('test2', 7)">ADAM</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="photo-box" style="background-image: url('test3.jpg');"></div>
+        <div class="info">
+            <div class="name">Candidate Charlie</div>
+            <div class="rank-badge">Tier: Analyzing</div>
+            <div class="rating-box">
+                <button class="btn-rate" onclick="vote('test3', 1)">Sub3</button>
+                <button class="btn-rate" onclick="vote('test3', 3)">LTN</button>
+                <button class="btn-rate" onclick="vote('test3', 4)">MTN</button>
+                <button class="btn-rate" onclick="vote('test3', 5)">HTN</button>
+                <button class="btn-rate" onclick="vote('test3', 6)">CHAD</button>
+                <button class="btn-rate" onclick="vote('test3', 7)">ADAM</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxg_X1nabQ0oBHBw6-cOtJ7k8WmHdRjFaGbAPXGOBsKx-lGJMZ5_xdktXn3vttIlFWogA/exec";
+    let currentUser = null;
+
+    function handleCredentialResponse(response) {
+        const payload = JSON.parse(atob(response.credential.split('.')[1]));
+        currentUser = payload.sub;
+        alert("Access Granted: Welcome, " + payload.name);
+    }
+
+    function vote(targetId, rating) {
+        if (!currentUser) {
+            alert("Identification required. Please sign in.");
+            return;
+        }
+
+        fetch(SCRIPT_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            cache: 'no-cache',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                userId: currentUser,
+                targetId: targetId,
+                rating: rating
+            })
+        }).then(() => {
