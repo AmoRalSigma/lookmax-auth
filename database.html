@@ -3,285 +3,332 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lookmax DB | Community</title>
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <title>RateMe</title>
     <style>
-        :root { 
-            --bg: #f0f7ff; 
-            --card: #ffffff; 
-            --accent: #007aff; 
-            --text: #1d1d1f; 
-            --gray: #86868b; 
-            --radius: 24px; 
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #121212;
+            color: #e0e0e0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
         }
-        body { 
-            background: var(--bg); 
-            color: var(--text); 
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
-            margin: 0; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
+
+        .container {
+            width: 90%;
+            max-width: 500px;
+            margin-top: 20px;
+            margin-bottom: 80px;
         }
-        header { 
-            width: 90%; 
-            max-width: 1000px; 
-            background: var(--card); 
-            margin: 20px; 
-            padding: 25px; 
-            border-radius: var(--radius); 
-            box-shadow: 0 8px 30px rgba(0,0,0,0.04); 
-            text-align: center; 
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 15px;
+            border-bottom: 1px solid #333;
         }
-        .container { 
-            width: 95%; 
-            max-width: 1000px; 
-            display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); 
-            gap: 25px; 
-            padding-bottom: 50px; 
+
+        h1 { margin: 0; font-size: 1.5rem; letter-spacing: 1px; }
+
+        /* Ввод ника */
+        .user-settings {
+            background: #1e1e1e;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            border: 1px solid #333;
         }
-        .card { 
-            background: var(--card); 
-            border-radius: var(--radius); 
-            padding: 20px; 
-            box-shadow: 0 4px 15px rgba(0,0,0,0.02); 
-            transition: 0.3s;
+
+        input[type="text"] {
+            background: #121212;
+            border: 1px solid #444;
+            color: white;
+            padding: 8px;
+            border-radius: 3px;
+            width: 100%;
+            box-sizing: border-box;
         }
-        .photo { 
-            width: 100%; 
-            height: 350px; 
-            border-radius: 18px; 
-            object-fit: cover; 
+
+        /* Фото и Статус */
+        .profile-card {
+            background: #1e1e1e;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+            border: 1px solid #333;
         }
-        .rating-badge { 
-            background: #eef6ff; 
-            color: var(--accent); 
-            padding: 5px 12px; 
-            border-radius: 12px; 
-            font-weight: 700; 
+
+        .photo-placeholder {
+            width: 100%;
+            height: 350px;
+            background-color: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+            overflow: hidden;
         }
-        .progress-bg { 
-            width: 100%; 
-            height: 8px; 
-            background: #f2f2f7; 
-            border-radius: 10px; 
-            margin: 15px 0; 
-            overflow: hidden; 
+        
+        .photo-placeholder img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
-        .progress-fill { 
-            height: 100%; 
-            background: var(--accent); 
-            width: 0%; 
-            transition: 1s ease-in-out; 
+
+        .stats {
+            margin-top: 10px;
+            font-size: 1.4em;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #ffffff;
         }
-        .vote-grid { 
-            display: grid; 
-            grid-template-columns: repeat(3, 1fr); 
-            gap: 8px; 
+
+        /* Сетка кнопок 2x3 */
+        .rating-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 8px;
+            margin-top: 15px;
         }
-        .btn-vote { 
-            border: none; 
-            background: #f2f2f7; 
-            color: var(--accent); 
-            padding: 10px; 
-            border-radius: 12px; 
-            cursor: pointer; 
-            font-weight: 600; 
-            font-size: 0.8rem; 
+
+        .rate-btn {
+            padding: 12px 5px;
+            border: none;
+            border-radius: 3px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 0.9em;
+            background: #333;
+            color: #aaa;
             transition: 0.2s;
+            text-transform: uppercase;
         }
-        .btn-vote:hover { background: var(--accent); color: #fff; }
-        .comment-item { 
-            font-size: 0.85rem; 
-            padding: 10px; 
-            background: #f9f9fb; 
-            border-radius: 12px; 
-            margin-bottom: 8px; 
-            position: relative; 
-            border-left: 3px solid var(--accent);
+
+        .rate-btn:active { background: #555; color: white; }
+
+        /* Цветовые акценты для кнопок (строгие) */
+        .btn-1 { border-bottom: 2px solid #d32f2f; } /* SUB */
+        .btn-2 { border-bottom: 2px solid #e64a19; } /* LTN */
+        .btn-3 { border-bottom: 2px solid #fbc02d; } /* MTN */
+        .btn-4 { border-bottom: 2px solid #afb42b; } /* HTN */
+        .btn-5 { border-bottom: 2px solid #388e3c; } /* ADAM */
+        .btn-6 { border-bottom: 2px solid #1976d2; } /* CHAD */
+
+        /* Комментарии */
+        .comments-section {
+            background: #1e1e1e;
+            padding: 15px;
+            border-radius: 5px;
+            border: 1px solid #333;
         }
-        .btn-del { 
-            position: absolute; 
-            right: 8px; 
-            top: 8px; 
-            background: none; 
-            border: none; 
-            color: #ff3b30; 
-            cursor: pointer; 
-            font-size: 14px; 
-            display: none; 
+
+        .comment-input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 8px;
+            background: #121212;
+            color: white;
+            border: 1px solid #444;
+            border-radius: 3px;
+            box-sizing: border-box;
+            resize: vertical;
         }
-        .comment-input-row { 
-            display: flex; 
-            gap: 8px; 
-            margin-top: 15px; 
+
+        .send-btn {
+            background: #333;
+            color: white;
+            border: 1px solid #555;
+            padding: 8px 15px;
+            cursor: pointer;
+            width: 100%;
+            font-weight: bold;
         }
-        .comment-input { 
-            flex: 1; 
-            border: 1px solid #d2d2d7; 
-            padding: 10px; 
-            border-radius: 12px; 
-            outline: none; 
+
+        .comments-list {
+            margin-top: 15px;
+            max-height: 300px;
+            overflow-y: auto;
         }
-        #toast { 
-            position: fixed; 
-            bottom: 25px; 
-            background: #1d1d1f; 
-            color: #fff; 
-            padding: 12px 25px; 
-            border-radius: 30px; 
-            display: none; 
-            z-index: 1000; 
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+
+        .comment {
+            border-bottom: 1px solid #333;
+            padding: 10px 0;
+            font-size: 0.9em;
         }
-        #user-name { color: var(--accent); font-weight: 700; cursor: pointer; text-decoration: underline; }
+
+        .comment-author {
+            color: #888;
+            font-size: 0.8em;
+            font-weight: bold;
+            margin-bottom: 3px;
+        }
+
+        /* Окно участия */
+        .participate-box {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #212121;
+            padding: 12px 25px;
+            border-radius: 30px;
+            border: 1px solid #444;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            z-index: 1000;
+        }
+
+        .participate-link {
+            color: #e0e0e0;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1em;
+            display: block;
+        }
     </style>
 </head>
 <body>
 
-<header>
-    <h1>Lookmax Ratings</h1>
-    <div id="g_id_onload" 
-         data-client_id="422243119545-qmkulqdrldj9m1fiijqafq2jr00r1o62.apps.googleusercontent.com" 
-         data-callback="handleCredentialResponse">
-    </div>
-    <div id="auth-ui">
-        <div class="g_id_signin" data-type="standard" data-shape="pill"></div>
-    </div>
-    <div id="user-ui" style="display:none">
-        Привет, <span id="user-name" onclick="changeNick()">Загрузка...</span>
-    </div>
-</header>
+    <div class="container">
+        
+        <div class="header">
+            <h1>RATEME</h1>
+        </div>
 
-<div class="container" id="cards-container"></div>
-<div id="toast"></div>
+        <div class="user-settings">
+            <input type="text" id="usernameInput" placeholder="Введите ник" oninput="saveUsername()">
+        </div>
 
-<script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwAJgIW2ObDKt69qWeSbny5DRCiSi302RHqHnQQSVV7V0HkU6UAeuFdBOK0IT10SIT6qw/exec";
-    
-    // Список твоих кандидатов. Добавляй новых сюда
-    const candidates = [
-        { id: "p1", name: "Alpha Candidate", photo: "test1.jpg" },
-        { id: "p2", name: "Bravo Member", photo: "test2.jpg" },
-        { id: "p3", name: "Charlie Pro", photo: "test3.jpg" }
-    ];
-
-    let user = null;
-    let admins = [];
-
-    function showToast(m) {
-        const t = document.getElementById('toast');
-        t.innerText = m; t.style.display = 'block';
-        setTimeout(() => t.style.display = 'none', 3000);
-    }
-
-    function handleCredentialResponse(r) {
-        const p = JSON.parse(atob(r.credential.split('.')[1]));
-        user = { id: p.sub, name: localStorage.getItem('nick') || p.name, email: p.email };
-        document.getElementById('auth-ui').style.display = 'none';
-        document.getElementById('user-ui').style.display = 'block';
-        document.getElementById('user-name').innerText = user.name;
-        showToast("Вы вошли как " + user.name);
-    }
-
-    function changeNick() {
-        const n = prompt("Придумай новый ник:", user.name);
-        if(n) { 
-            user.name = n; 
-            localStorage.setItem('nick', n); 
-            document.getElementById('user-name').innerText = n; 
-            showToast("Ник изменен!");
-        }
-    }
-
-    function render() {
-        document.getElementById('cards-container').innerHTML = candidates.map(c => `
-            <div class="card">
-                <img src="${c.photo}" class="photo">
-                <div style="display:flex; justify-content:space-between; align-items:center; margin:15px 0 5px;">
-                    <b style="font-size:1.3rem">${c.name}</b>
-                    <span class="rating-badge" id="val-${c.id}">0.0</span>
-                </div>
-                <div class="progress-bg"><div class="progress-fill" id="bar-${c.id}"></div></div>
-                <div class="vote-grid">
-                    ${[1,3,4,5,6,7].map(v => `<button class="btn-vote" onclick="vote('${c.id}', ${v})">${v}</button>`).join('')}
-                </div>
-                <div style="margin-top:20px; border-top: 1px solid #eee; padding-top: 15px;">
-                    <div id="comments-${c.id}" style="max-height:150px; overflow-y:auto; margin-bottom: 10px;"></div>
-                    <div class="comment-input-row">
-                        <input type="text" id="in-${c.id}" class="comment-input" placeholder="Напиши мнение...">
-                        <button class="btn-vote" style="background:var(--accent); color:#fff" onclick="addComment('${c.id}')">➤</button>
-                    </div>
-                </div>
+        <div class="profile-card">
+            <div class="photo-placeholder">
+                <img src="https://via.placeholder.com/400x500?text=PHOTO" alt="Фото">
             </div>
-        `).join('');
-    }
-
-    async function vote(tid, r) {
-        if(!user) return showToast("Сначала войди в систему!");
-        fetch(SCRIPT_URL, { 
-            method: 'POST', 
-            mode: 'no-cors', 
-            body: JSON.stringify({ type: 'vote', userId: user.id, userEmail: user.email, targetId: tid, rating: r }) 
-        });
-        showToast("Голос принят, база обновляется");
-    }
-
-    async function addComment(tid) {
-        if(!user) return showToast("Войди, чтобы оставить отзыв!");
-        const txt = document.getElementById(`in-${tid}`).value.trim();
-        if(!txt) return;
-        fetch(SCRIPT_URL, { 
-            method: 'POST', 
-            mode: 'no-cors', 
-            body: JSON.stringify({ type: 'comment', targetId: tid, userName: user.name, userId: user.id, text: txt }) 
-        });
-        document.getElementById(`in-${tid}`).value = "";
-        showToast("Мнение отправлено");
-    }
-
-    async function deleteComment(tid, text) {
-        if(!confirm("Удалить этот комментарий?")) return;
-        fetch(SCRIPT_URL, { 
-            method: 'POST', 
-            mode: 'no-cors', 
-            body: JSON.stringify({ type: 'deleteComment', targetId: tid, text: text, userId: user.id, userEmail: user.email }) 
-        });
-        showToast("Удаление...");
-    }
-
-    async function sync() {
-        try {
-            const res = await fetch(SCRIPT_URL);
-            const d = await res.json();
-            admins = d.admins || [];
             
-            candidates.forEach(c => {
-                // Считаем рейтинг
-                const vs = d.votes.filter(v => v[0] == c.id);
-                if(vs.length > 0) {
-                    const avg = (vs.reduce((a,b)=>a + Number(b[1]), 0) / vs.length).toFixed(1);
-                    document.getElementById(`val-${c.id}`).innerText = avg;
-                    document.getElementById(`bar-${c.id}`).style.width = (avg/7*100)+'%';
+            <div class="stats">
+                <span id="currentStatus">N/A</span>
+            </div>
+
+            <div class="rating-grid">
+                <button class="rate-btn btn-1" onclick="vote(1)">Sub</button>
+                <button class="rate-btn btn-2" onclick="vote(2)">LTN</button>
+                <button class="rate-btn btn-3" onclick="vote(3)">MTN</button>
+                <button class="rate-btn btn-4" onclick="vote(4)">HTN</button>
+                <button class="rate-btn btn-5" onclick="vote(5)">Adam</button>
+                <button class="rate-btn btn-6" onclick="vote(6)">Chad</button>
+            </div>
+        </div>
+
+        <div class="comments-section">
+            <textarea id="commentText" class="comment-input" rows="2" placeholder="Комментарий..."></textarea>
+            <button class="send-btn" onclick="addComment()">ОТПРАВИТЬ</button>
+            
+            <div class="comments-list" id="commentsList"></div>
+        </div>
+
+    </div>
+
+    <div class="participate-box">
+        <a href="https://t.me/tvoj_bot" class="participate-link" target="_blank">ПРИНЯТЬ УЧАСТИЕ</a>
+    </div>
+
+    <script>
+        let totalScore = 0;
+        let votesCount = 0;
+        let myUserId = localStorage.getItem('myUserId');
+
+        if (!myUserId) {
+            myUserId = 'user_' + Math.random().toString(36).substr(2, 9);
+            localStorage.setItem('myUserId', myUserId);
+        }
+
+        window.onload = function() {
+            const savedName = localStorage.getItem('username');
+            if (savedName) {
+                document.getElementById('usernameInput').value = savedName;
+            }
+            loadComments();
+        };
+
+        function saveUsername() {
+            const newName = document.getElementById('usernameInput').value;
+            localStorage.setItem('username', newName);
+            loadComments(); 
+        }
+
+        function vote(score) {
+            totalScore += score;
+            votesCount++;
+            updateStatusDisplay();
+        }
+
+        function updateStatusDisplay() {
+            if (votesCount === 0) return;
+
+            const avg = totalScore / votesCount;
+            let statusText = "";
+
+            // ЛОГИКА ОЦЕНОК (6 уровней)
+            if (avg <= 1.5) {
+                statusText = "SUB";
+            } else if (avg <= 2.5) {
+                statusText = "LTN";
+            } else if (avg <= 3.5) {
+                statusText = "MTN";
+            } else if (avg <= 4.5) {
+                statusText = "HTN";
+            } else if (avg <= 5.5) {
+                statusText = "ADAM";
+            } else {
+                statusText = "CHAD";
+            }
+
+            document.getElementById('currentStatus').innerText = statusText;
+        }
+
+        function addComment() {
+            const text = document.getElementById('commentText').value;
+            if (text.trim() === "") return;
+
+            const newComment = {
+                userId: myUserId, 
+                text: text,
+                date: Date.now()
+            };
+
+            let comments = JSON.parse(localStorage.getItem('siteComments')) || [];
+            comments.unshift(newComment);
+            localStorage.setItem('siteComments', JSON.stringify(comments));
+
+            document.getElementById('commentText').value = "";
+            loadComments();
+        }
+
+        function loadComments() {
+            const list = document.getElementById('commentsList');
+            let comments = JSON.parse(localStorage.getItem('siteComments')) || [];
+            const currentName = localStorage.getItem('username') || "Аноним";
+            
+            list.innerHTML = "";
+
+            comments.forEach(comment => {
+                let displayName = "Аноним";
+                if (comment.userId === myUserId) {
+                    displayName = currentName;
                 }
 
-                // Рендерим комменты
-                const cs = d.comments.filter(com => com[0] == c.id);
-                document.getElementById(`comments-${c.id}`).innerHTML = cs.map(com => {
-                    const isOwner = user && (user.id == com[4] || admins.includes(user.email));
-                    return `<div class="comment-item">
-                        <b>${com[1]}:</b> ${com[2]}
-                        <button class="btn-del" style="display:${isOwner ? 'block' : 'none'}" 
-                                onclick="deleteComment('${c.id}', '${com[2]}')">✕</button>
-                    </div>`;
-                }).join('');
+                const div = document.createElement('div');
+                div.className = 'comment';
+                div.innerHTML = `
+                    <div class="comment-author">${displayName}</div>
+                    <div>${comment.text}</div>
+                `;
+                list.appendChild(div);
             });
-        } catch(e) { console.error("Sync error:", e); }
-    }
-
-    render();
-    setInterval(sync, 4000); // Синхронизация каждые 4 секунды
-</script>
+        }
+    </script>
 </body>
 </html>
