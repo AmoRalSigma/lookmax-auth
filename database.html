@@ -2,7 +2,6 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <link rel="icon" type="image/png" href="https://i.ibb.co/SDTGBKpD/image.png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lookmax Community | Soft Blue</title>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
@@ -195,24 +194,6 @@
             display: none;
             z-index: 9999;
         }
-
-        /* Новая ссылка внизу */
-        .footer-link {
-            margin: 20px 0 40px;
-            text-align: center;
-        }
-
-        .footer-link a {
-            color: var(--gray);
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 0.9rem;
-            transition: color 0.3s;
-        }
-
-        .footer-link a:hover {
-            color: var(--accent);
-        }
     </style>
 </head>
 <body>
@@ -232,16 +213,12 @@
 </header>
 
 <div class="container" id="cards-container"></div>
-
-<div class="footer-link">
-    <a href="https://t.me/tvoj_bot" target="_blank">Принять участие</a>
-</div>
-
 <div id="toast"></div>
 
 <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz-uyyjy949ZPsq1NaCaE_xbklqKzH4FKH4t2D6ebeJdl0CK6Vk1eSOLShfXMSVDJA0hQ/exec";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxxU_p8Zq1KF4MpTqGD42cxVyRYdumsI43lPWGw_BSUspcoHralr2Q2f51Fq8C79pyWyw/exec";
     
+    // Список твоих пацанов
     const candidates = [
         { id: "test1", name: "Alpha Candidate", photo: "test1.jpg" },
         { id: "test2", name: "Bravo Member", photo: "test2.jpg" },
@@ -301,7 +278,7 @@
                 <div class="comment-section">
                     <div class="comment-list" id="comments-${c.id}"></div>
                     <div class="comment-input-row">
-                        <input type="text" class="comment-input" id="input-${tid=c.id}" placeholder="Твое мнение...">
+                        <input type="text" class="comment-input" id="input-${c.id}" placeholder="Твое мнение...">
                         <button class="btn-send" onclick="sendComment('${c.id}')">➤</button>
                     </div>
                 </div>
@@ -324,6 +301,7 @@
         const inp = document.getElementById(`input-${tid}`);
         const val = inp.value.trim();
         if (!val) return;
+        
         fetch(SCRIPT_URL, {
             method: 'POST',
             mode: 'no-cors',
