@@ -164,6 +164,82 @@
             color: var(--accent);
         }
 
+        .hall {
+            width: 95%;
+            max-width: 1000px;
+            background: var(--card);
+            border-radius: var(--radius);
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+            margin-top: 20px;
+        }
+
+        .hall h2 {
+            margin: 0 0 12px 0;
+        }
+
+        .hall-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .hall-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #edf2f7;
+        }
+
+        .hall-item:last-child {
+            border-bottom: none;
+        }
+
+        .medal {
+            font-weight: 700;
+        }
+
+        .profile-view {
+            width: 95%;
+            max-width: 1000px;
+            background: var(--card);
+            border-radius: var(--radius);
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+            margin-top: 20px;
+            display: none;
+        }
+
+        .profile-hero {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .profile-hero img {
+            max-width: 320px;
+            border-radius: 18px;
+            width: 100%;
+            object-fit: cover;
+        }
+
+        .btn-back {
+            position: sticky;
+            top: 10px;
+            display: inline-block;
+            margin-bottom: 12px;
+            padding: 12px 18px;
+            background: linear-gradient(90deg, var(--accent), #6aa5f3);
+            color: white;
+            border-radius: 14px;
+            border: none;
+            cursor: pointer;
+            font-weight: 700;
+            box-shadow: 0 6px 18px rgba(74, 144, 226, 0.35);
+            z-index: 2;
+        }
+
         .comment-input-row {
             display: flex;
             gap: 5px;
@@ -217,17 +293,21 @@
     </div>
 </header>
 
+<div class="hall" id="hall-of-fame" style="display:none">
+    <h2>Зал Славы</h2>
+    <ul class="hall-list" id="hall-list"></ul>
+</div>
+
 <div class="container" id="cards-container"></div>
+<div class="profile-view" id="profile-view"></div>
 <div id="toast"></div>
 
 <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxOK7b0g5abu-aHjpVQhynG_yZExwbGYrsJKqr747Tdwco3XHO9KniXCsKJlp0k3SUM_A/exec";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxH1m-SObuqDn_ZuJTJHpc3iz66y5l7JDtC0n57FhOWcT9xDMmRGbD2lXlktMuubreD3A/exec";
     
-    const candidates = [
-        { id: "test1", name: "Alpha Candidate", photo: "test1.jpg" },
-        { id: "test2", name: "Bravo Member", photo: "test2.jpg" },
-        { id: "test3", name: "Charlie Elite", photo: "test3.jpg" }
-    ];
+    let candidates = [];
+    let votes = [];
+    let comments = [];
 
     let currentUser = null;
     let userEmail = ""; // Новая переменная для почты
@@ -250,6 +330,7 @@
         document.getElementById('auth-btn').style.display = 'none';
         document.getElementById('user-info').style.display = 'block';
         document.getElementById('user-name').innerText = currentNick;
+        syncUserNickname();
         showToast("Успешный вход!");
     }
 
@@ -259,23 +340,46 @@
             currentNick = n;
             localStorage.setItem('customNick', n);
             document.getElementById('user-name').innerText = n;
+            syncUserNickname();
         }
+    }
+
+    function syncUserNickname() {
+        if (!userEmail || !currentNick) return;
+        fetch(SCRIPT_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            body: JSON.stringify({
+                type: 'user',
+                userEmail: userEmail,
+                nickname: currentNick
+            })
+        });
+    }
+
+    function getStats(targetId) {
+        const vs = votes.filter(v => v[0] === targetId);
+        const count = vs.length;
+        const avg = count > 0 ? (vs.reduce((a, b) => a + Number(b[1]), 0) / count).toFixed(1) : "0.0";
+        return { avg, count };
     }
 
     function renderCards() {
         const container = document.getElementById('cards-container');
-        container.innerHTML = candidates.map(c => `
-            <div class="card">
+        container.innerHTML = candidates.map(c => {
+            const { avg, count } = getStats(c.id);
+            return `
+            <div class="card" onclick="openProfile('${c.id}')">
                 <img src="${c.photo}" class="photo">
                 <div class="name-row">
                     <div class="name">${c.name}</div>
-                    <div class="rating-badge" id="val-${c.id}">0.0</div>
+                    <div class="rating-badge" id="val-${c.id}">${avg}</div>
                 </div>
-                <div style="font-size: 0.8rem; color: var(--gray); margin-bottom: 10px;" id="label-${c.id}">Rating...</div>
+                <div style="font-size: 0.8rem; color: var(--gray); margin-bottom: 10px;" id="label-${c.id}">Голосов: ${count}</div>
                 <div class="progress-bg">
-                    <div class="progress-fill" id="bar-${c.id}"></div>
+                    <div class="progress-fill" id="bar-${c.id}" style="width:${(avg / 7) * 100}%"></div>
                 </div>
-                <div class="vote-grid">
+                <div class="vote-grid" onclick="event.stopPropagation()">
                     <button class="btn-vote" onclick="vote('${c.id}', 1)">Sub3</button>
                     <button class="btn-vote" onclick="vote('${c.id}', 3)">LTN</button>
                     <button class="btn-vote" onclick="vote('${c.id}', 4)">MTN</button>
@@ -291,7 +395,100 @@
                     </div>
                 </div>
             </div>
-        `).join('');
+        `;
+        }).join('');
+
+        // Рендерим комментарии по кандидатам
+        candidates.forEach(c => {
+            const cs = comments.filter(com => com[0] === c.id);
+            const clist = document.getElementById(`comments-${c.id}`);
+            if (clist) {
+                clist.innerHTML = cs.map(com => `
+                    <div class="comment-item"><b>${com[1]}:</b> ${com[2]}</div>
+                `).join('');
+            }
+        });
+    }
+
+    function renderHallOfFame() {
+        const hall = document.getElementById('hall-of-fame');
+        const list = document.getElementById('hall-list');
+        const rated = candidates.map(c => {
+            const { avg, count } = getStats(c.id);
+            return { ...c, avg: Number(avg), count };
+        }).filter(c => c.count > 0);
+        rated.sort((a, b) => b.avg - a.avg);
+        const top = rated.slice(0, 10);
+        if (top.length === 0) {
+            hall.style.display = "none";
+            return;
+        }
+        hall.style.display = "block";
+        list.innerHTML = top.map((c, idx) => {
+            let medal = "";
+            if (idx === 0) medal = "🥇 Золото";
+            else if (idx === 1) medal = "🥈 Серебро";
+            else if (idx === 2) medal = "🥉 Бронза";
+            return `<li class="hall-item">
+                <span>${idx + 1}. ${c.name} ${medal ? `<span class=\"medal\">${medal}</span>` : ""}</span>
+                <span>${c.avg.toFixed(1)} • Голосов: ${c.count}</span>
+            </li>`;
+        }).join('');
+    }
+
+    function renderProfile(id) {
+        const profile = document.getElementById('profile-view');
+        const wrapList = document.getElementById('cards-container');
+        const hall = document.getElementById('hall-of-fame');
+
+        const cand = candidates.find(c => c.id === id);
+        if (!cand) return;
+
+        const { avg, count } = getStats(cand.id);
+        const photos = (cand.photo || "").split(",").map(p => p.trim()).filter(Boolean);
+
+        wrapList.style.display = "none";
+        hall.style.display = "none";
+        profile.style.display = "block";
+        window.scrollTo(0, 0);
+
+        const gallery = photos.map(p => `<img src="${p}" alt="${cand.name}">`).join('') || `<img src="${cand.photo || ''}" alt="${cand.name}">`;
+        const tgLink = cand.tg ? `<div style="margin:6px 0;"><a href="${cand.tg}" target="_blank">Написать в Telegram</a></div>` : "";
+
+        profile.innerHTML = `
+            <button class="btn-back" onclick="goBack()">Назад</button>
+            <div class="profile-hero">
+                ${gallery}
+                <div>
+                    <h2>${cand.name}</h2>
+                    <div style="margin:6px 0;">Средний балл: ${avg} • Голосов: ${count}</div>
+                    <div style="margin:6px 0;">${cand.description || ""}</div>
+                    ${tgLink}
+                </div>
+            </div>
+        `;
+    }
+
+    function goBack() {
+        history.pushState("", document.title, window.location.pathname + window.location.search);
+        document.getElementById('profile-view').style.display = "none";
+        document.getElementById('cards-container').style.display = "grid";
+        renderHallOfFame();
+    }
+
+    function openProfile(id) {
+        location.hash = id;
+    }
+
+    function handleHashChange() {
+        const hash = location.hash.replace("#", "");
+        if (hash) {
+            renderProfile(hash);
+        } else {
+            document.getElementById('profile-view').style.display = "none";
+            document.getElementById('cards-container').style.display = "grid";
+            renderHallOfFame();
+        }
     }
 
     async function vote(tid, r) {
@@ -366,30 +563,17 @@
         try {
             const r = await fetch(SCRIPT_URL);
             const d = await r.json();
-            
-            candidates.forEach(c => {
-                const vs = d.votes.filter(v => v[0] === c.id);
-                if (vs.length > 0) {
-                    const avg = (vs.reduce((a, b) => a + Number(b[1]), 0) / vs.length).toFixed(1);
-                    document.getElementById(`val-${c.id}`).innerText = avg;
-                    document.getElementById(`bar-${c.id}`).style.width = (avg / 7 * 100) + "%";
-                    
-                    let l = "MTN";
-                    if (avg < 3.5) l = "Below Average";
-                    if (avg >= 6) l = "Top Tier";
-                    document.getElementById(`label-${c.id}`).innerText = l;
-                }
-
-                const cs = d.comments.filter(com => com[0] === c.id);
-                const clist = document.getElementById(`comments-${c.id}`);
-                clist.innerHTML = cs.map(com => `
-                    <div class="comment-item"><b>${com[1]}:</b> ${com[2]}</div>
-                `).join('');
-            });
+            candidates = d.candidates || [];
+            votes = d.votes || [];
+            comments = d.comments || [];
+            renderCards();
+            renderHallOfFame();
+            handleHashChange();
         } catch(e) {}
     }
 
-    renderCards();
+    window.addEventListener('hashchange', handleHashChange);
+    sync();
     setInterval(sync, 4000);
 </script>
 
