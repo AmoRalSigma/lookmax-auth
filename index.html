@@ -224,6 +224,189 @@
             object-fit: cover;
         }
 
+        .modal-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .modal-main-photo {
+            width: 100%;
+            max-width: 400px;
+            height: 500px;
+            object-fit: cover;
+            border-radius: 24px;
+            margin: 0 auto 20px;
+            display: block;
+            box-shadow: 0 8px 30px rgba(74, 144, 226, 0.15);
+        }
+
+        .modal-name {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: var(--text);
+            margin: 0;
+            text-align: center;
+        }
+
+        .modal-section {
+            background: var(--light-accent);
+            border-radius: 20px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .modal-section-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin: 0 0 12px 0;
+        }
+
+        .modal-section-content {
+            color: var(--text);
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        .music-section {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: var(--light-accent);
+            border-radius: 20px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .music-icon {
+            font-size: 2rem;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.1);
+                opacity: 0.8;
+            }
+        }
+
+        .music-icon-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .music-icon-wrapper::before {
+            content: '▶';
+            position: absolute;
+            font-size: 0.8rem;
+            color: var(--accent);
+            opacity: 0.7;
+        }
+
+        .music-content {
+            flex: 1;
+        }
+
+        .music-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin: 0 0 6px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .music-text {
+            color: var(--text);
+            margin: 0;
+        }
+
+        .modal-comments-section {
+            margin: 30px 0;
+        }
+
+        .modal-comments-list {
+            max-height: 300px;
+            overflow-y: auto;
+            margin-bottom: 15px;
+            padding: 10px 0;
+        }
+
+        .modal-comment-item {
+            padding: 12px;
+            margin-bottom: 10px;
+            background: var(--card);
+            border-radius: 12px;
+            border-left: 4px solid var(--accent);
+        }
+
+        .modal-comment-item b {
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        .modal-comment-input-row {
+            display: flex;
+            gap: 8px;
+            margin-top: 15px;
+        }
+
+        .modal-comment-input {
+            flex: 1;
+            border: 2px solid var(--light-accent);
+            padding: 12px 16px;
+            border-radius: 14px;
+            outline: none;
+            font-size: 1rem;
+        }
+
+        .modal-comment-input:focus {
+            border-color: var(--accent);
+        }
+
+        .modal-btn-send {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 14px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .modal-btn-send:hover {
+            background: #3a7bc8;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(74, 144, 226, 0.3);
+        }
+
+        .modal-other-candidates {
+            margin-top: 50px;
+            padding-top: 30px;
+            border-top: 2px solid var(--light-accent);
+        }
+
+        .modal-other-candidates h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text);
+            margin: 0 0 20px 0;
+        }
+
+        .modal-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
         .btn-back {
             position: sticky;
             top: 10px;
@@ -238,6 +421,34 @@
             font-weight: 700;
             box-shadow: 0 6px 18px rgba(74, 144, 226, 0.35);
             z-index: 2;
+        }
+
+        .btn-close-modal {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 45px;
+            height: 45px;
+            background: rgba(255, 255, 255, 0.95);
+            border: 2px solid var(--accent);
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            box-shadow: 0 4px 15px rgba(74, 144, 226, 0.3);
+            transition: 0.2s;
+        }
+
+        .btn-close-modal:hover {
+            background: var(--accent);
+            color: white;
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(74, 144, 226, 0.4);
         }
 
         .comment-input-row {
@@ -276,7 +487,7 @@
         .btn-submit {
             display: inline-block;
             margin-top: 20px;
-            padding: 12px 24px;
+            padding: 12px 24px; 
             background-color: var(--accent);
             color: white;
             text-decoration: none;
@@ -304,9 +515,48 @@
                 margin-right: auto;
             }
         }
+
+        #loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            font-size: 1.2rem;
+            color: var(--text);
+        }
+
+        .beta-banner {
+            width: 100%;
+            background: linear-gradient(90deg, #ff6b6b, #ff8e53);
+            color: white;
+            padding: 12px 20px;
+            text-align: center;
+            font-weight: 600;
+            box-shadow: 0 2px 10px rgba(255, 107, 107, 0.3);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .beta-banner a {
+            color: white;
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
+
+<div id="loading-screen">Загрузка анкет, подождите немного...</div>
+
+<div class="beta-banner">
+    ⚠️ Сайт в режиме BETA. Заметили баг? Пишите в <a href="https://t.me/zar_lookmax_bot" target="_blank">бота</a>!
+</div>
 
 <header>
     <h1>Lookmax Community</h1>
@@ -346,6 +596,19 @@
     let currentNick = localStorage.getItem('customNick') || "";
     const commentCooldownMs = 5000;
     let lastCommentTime = 0;
+
+    // Функция для преобразования имени файла в GitHub ссылку
+    function getGitHubUrl(filename) {
+        if (!filename || !filename.trim()) return '';
+        const trimmed = filename.trim();
+        // Если уже полная ссылка (http/https), возвращаем как есть
+        if (trimmed.startsWith('http://') || trimmed.startsWith('https://')) {
+            return trimmed;
+        }
+        // Если это имя файла, превращаем в GitHub ссылку
+        // Замените ТВОЙ_НИК и РЕПОЗИТОРИЙ на реальные значения
+        return `https://raw.githubusercontent.com/ТВОЙ_НИК/РЕПОЗИТОРИЙ/main/files/${trimmed}`;
+    }
 
     function showToast(m) {
         const t = document.getElementById('toast');
@@ -400,9 +663,12 @@
         const container = document.getElementById('cards-container');
         container.innerHTML = candidates.map(c => {
             const { avg, count } = getStats(c.id);
+            // Обрабатываем фото: если несколько через запятую, берем первое
+            const photoValue = (c.photo || "").split(",").map(p => p.trim()).filter(Boolean)[0] || c.photo || '';
+            const photoUrl = getGitHubUrl(photoValue);
             return `
             <div class="card" onclick="openProfile('${c.id}')">
-                <img src="${c.photo}" class="photo">
+                <img src="${photoUrl}" class="photo">
                 <div class="name-row">
                     <div class="name">${c.name}</div>
                     <div class="rating-badge" id="val-${c.id}">${avg}</div>
@@ -478,24 +744,90 @@
 
         const { avg, count } = getStats(cand.id);
         const photos = (cand.photo || "").split(",").map(p => p.trim()).filter(Boolean);
+        const mainPhotoRaw = photos[0] || cand.photo || '';
+        const mainPhoto = getGitHubUrl(mainPhotoRaw);
+        const modalComments = comments.filter(com => com[0] === cand.id);
+        const otherCandidates = candidates.filter(c => c.id !== cand.id);
 
         wrapList.style.display = "none";
         hall.style.display = "none";
         profile.style.display = "block";
         window.scrollTo(0, 0);
 
-        const gallery = photos.map(p => `<img src="${p}" alt="${cand.name}">`).join('') || `<img src="${cand.photo || ''}" alt="${cand.name}">`;
-        const tgLink = cand.tg ? `<div style="margin:6px 0;"><a href="${cand.tg}" target="_blank">Написать в Telegram</a></div>` : "";
+        // Обрабатываем музыку: если это имя файла, превращаем в ссылку
+        const musicValue = cand.music || '';
+        const musicUrl = getGitHubUrl(musicValue);
+        const musicDisplay = musicUrl && musicUrl !== musicValue ? 
+            `<a href="${musicUrl}" target="_blank" style="color: var(--accent); text-decoration: none;">${musicValue}</a>` : 
+            musicValue;
+        const musicBlock = musicValue && musicValue.trim() ? `
+            <div class="music-section">
+                <div class="music-icon-wrapper">
+                    <span class="music-icon">🎵</span>
+                </div>
+                <div class="music-content">
+                    <div class="music-title">Любимый трек</div>
+                    <div class="music-text">${musicDisplay}</div>
+                </div>
+            </div>
+        ` : '';
+
+        const descriptionBlock = cand.description && cand.description.trim() ? `
+            <div class="modal-section">
+                <div class="modal-section-title">О себе</div>
+                <div class="modal-section-content">${cand.description}</div>
+            </div>
+        ` : '';
+
+        const tgLink = cand.tg ? `<div style="margin:10px 0;"><a href="${cand.tg}" target="_blank" style="color: var(--accent); text-decoration: none; font-weight: 600;">💬 Написать в Telegram</a></div>` : "";
 
         profile.innerHTML = `
-            <button class="btn-back" onclick="goBack()">Назад</button>
-            <div class="profile-hero">
-                ${gallery}
-                <div>
-                    <h2>${cand.name}</h2>
-                    <div style="margin:6px 0;">Средний балл: ${avg} • Голосов: ${count}</div>
-                    <div style="margin:6px 0;">${cand.description || ""}</div>
-                    ${tgLink}
+            <button class="btn-close-modal" onclick="goBack()" title="Закрыть">×</button>
+            <div class="modal-header">
+                <img src="${mainPhoto}" alt="${cand.name}" class="modal-main-photo">
+                <h1 class="modal-name">${cand.name}</h1>
+                <div style="font-size: 1.1rem; color: var(--gray); margin: 10px 0;">
+                    Средний балл: <strong style="color: var(--accent);">${avg}</strong> • Голосов: <strong style="color: var(--accent);">${count}</strong>
+                </div>
+                ${tgLink}
+            </div>
+            ${descriptionBlock}
+            ${musicBlock}
+            <div class="modal-comments-section">
+                <div class="modal-section-title" style="margin-bottom: 15px;">Комментарии</div>
+                <div class="modal-comments-list" id="modal-comments-${cand.id}">
+                    ${modalComments.length > 0 ? modalComments.map(com => `
+                        <div class="modal-comment-item">
+                            <b>${com[1]}:</b> ${com[2]}
+                        </div>
+                    `).join('') : '<div style="color: var(--gray); padding: 20px; text-align: center;">Пока нет комментариев</div>'}
+                </div>
+                <div class="modal-comment-input-row">
+                    <input type="text" class="modal-comment-input" id="modal-input-${cand.id}" placeholder="Напиши комментарий..." onkeypress="if(event.key==='Enter') sendModalComment('${cand.id}')">
+                    <button class="modal-btn-send" onclick="sendModalComment('${cand.id}')">Отправить</button>
+                </div>
+            </div>
+            <div class="modal-other-candidates">
+                <h3>Другие участники сообщества</h3>
+                <div class="modal-cards-grid" id="modal-other-cards">
+                    ${otherCandidates.map(c => {
+                        const { avg: oAvg, count: oCount } = getStats(c.id);
+                        const oPhotoRaw = (c.photo || "").split(",").map(p => p.trim()).filter(Boolean)[0] || c.photo || '';
+                        const oPhoto = getGitHubUrl(oPhotoRaw);
+                        return `
+                            <div class="card" onclick="openProfile('${c.id}')" style="cursor: pointer;">
+                                <img src="${oPhoto}" class="photo">
+                                <div class="name-row">
+                                    <div class="name">${c.name}</div>
+                                    <div class="rating-badge">${oAvg}</div>
+                                </div>
+                                <div style="font-size: 0.8rem; color: var(--gray); margin-bottom: 10px;">Голосов: ${oCount}</div>
+                                <div class="progress-bg">
+                                    <div class="progress-fill" style="width:${(oAvg / 7) * 100}%"></div>
+                                </div>
+                            </div>
+                        `;
+                    }).join('')}
                 </div>
             </div>
         `;
@@ -591,6 +923,56 @@
         showToast("Отправлено");
     }
 
+    async function sendModalComment(tid) {
+        if (!currentUser) return showToast("Войди, чтобы писать");
+        const now = Date.now();
+        if (now - lastCommentTime < commentCooldownMs) {
+            const waitMs = Math.ceil((commentCooldownMs - (now - lastCommentTime)) / 1000);
+            return showToast(`Подожди ${waitMs} сек перед новым комментом`);
+        }
+        const inp = document.getElementById(`modal-input-${tid}`);
+        if (!inp) return;
+        const val = inp.value.trim();
+        if (!val) return;
+
+        lastCommentTime = now;
+        
+        try {
+            await fetch(SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                body: JSON.stringify({ 
+                    type: 'comment', 
+                    targetId: tid, 
+                    userName: currentNick, 
+                    userEmail: userEmail,
+                    text: val 
+                })
+            });
+            
+            inp.value = "";
+            showToast("Комментарий отправлен!");
+            
+            // Мгновенно добавляем комментарий в список без перезагрузки
+            const commentsList = document.getElementById(`modal-comments-${tid}`);
+            if (commentsList) {
+                const emptyMsg = commentsList.querySelector('div[style*="color: var(--gray)"]');
+                if (emptyMsg) emptyMsg.remove();
+                
+                const newComment = document.createElement('div');
+                newComment.className = 'modal-comment-item';
+                newComment.innerHTML = `<b>${currentNick}:</b> ${val}`;
+                commentsList.appendChild(newComment);
+                commentsList.scrollTop = commentsList.scrollHeight;
+            }
+            
+            // Обновляем данные через небольшую задержку для синхронизации
+            setTimeout(() => sync(), 1000);
+        } catch (e) {
+            showToast("Ошибка отправки");
+        }
+    }
+
     async function sync() {
         try {
             const r = await fetch(SCRIPT_URL);
@@ -601,8 +983,48 @@
             renderCards();
             renderHallOfFame();
             handleHashChange();
-        } catch(e) {}
+            // Скрываем экран загрузки только в самом конце, когда все отрисовано
+            document.getElementById('loading-screen').style.display = 'none';
+        } catch(e) {
+            // В случае ошибки тоже скрываем экран загрузки
+            document.getElementById('loading-screen').style.display = 'none';
+        }
     }
+
+    // Админская функция накрутки рейтинга
+    window.adminBoost = async function(id, count) {
+        if (!id || !count || count <= 0) {
+            console.error('adminBoost: Invalid parameters. Usage: adminBoost(candidateId, voteCount)');
+            return;
+        }
+        
+        try {
+            const response = await fetch(SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                body: JSON.stringify({
+                    type: 'admin_boost',
+                    auth: 'ZarechyeMax2024',
+                    targetId: id,
+                    count: count
+                })
+            });
+            
+            console.log(`✅ Admin boost успешно применен: ${count} голосов для кандидата ${id}`);
+            
+            // Обновляем данные и перерисовываем профиль, если он открыт
+            setTimeout(async () => {
+                await sync();
+                const currentHash = location.hash.replace("#", "");
+                if (currentHash === id) {
+                    renderProfile(id);
+                }
+            }, 1500);
+            
+        } catch (e) {
+            console.error('❌ Ошибка при применении admin boost:', e);
+        }
+    };
 
     window.addEventListener('hashchange', handleHashChange);
     sync();
