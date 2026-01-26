@@ -585,7 +585,7 @@
 <div id="toast"></div>
 
 <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyUHosniUoEVEkJeQgpZ62hBHk8mHTi48bmvS9dF3nFeCwS9g0FEKXBKmuOtS01wMcghw/exec";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwMKv9ljOlQXxFQVAZcuF8EYcrBRCIWRQn9YkRb2eF8nnSbr61fFBff246GOMsngn9hhg/exec";
     
     let candidates = [];
     let votes = [];
@@ -606,8 +606,8 @@
             return trimmed;
         }
         // Если это имя файла, превращаем в GitHub ссылку
-        // Замените ТВОЙ_НИК и РЕПОЗИТОРИЙ на реальные значения
-        return `https://raw.githubusercontent.com/ТВОЙ_НИК/РЕПОЗИТОРИЙ/main/files/${trimmed}`;
+        // Файлы лежат прямо в корне репозитория 'arnopon/Looxmax'
+        return `https://raw.githubusercontent.com/arnopon/Looxmax/main/${trimmed}`;
     }
 
     function showToast(m) {
@@ -643,7 +643,9 @@
         if (!userEmail || !currentNick) return;
         fetch(SCRIPT_URL, {
             method: 'POST',
-            mode: 'no-cors',
+            headers: {
+                'Content-Type': 'application/json'
+            },
             body: JSON.stringify({
                 type: 'user',
                 userEmail: userEmail,
@@ -870,7 +872,9 @@
         try {
             await fetch(SCRIPT_URL, {
                 method: 'POST',
-                mode: 'no-cors',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
                 body: JSON.stringify({ 
                     type: 'vote', 
                     userId: currentUser, 
@@ -910,7 +914,9 @@
         lastCommentTime = now;
         fetch(SCRIPT_URL, {
             method: 'POST',
-            mode: 'no-cors',
+            headers: {
+                'Content-Type': 'application/json'
+            },
             body: JSON.stringify({ 
                 type: 'comment', 
                 targetId: tid, 
@@ -940,7 +946,9 @@
         try {
             await fetch(SCRIPT_URL, {
                 method: 'POST',
-                mode: 'no-cors',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
                 body: JSON.stringify({ 
                     type: 'comment', 
                     targetId: tid, 
@@ -1001,7 +1009,9 @@
         try {
             const response = await fetch(SCRIPT_URL, {
                 method: 'POST',
-                mode: 'no-cors',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
                 body: JSON.stringify({
                     type: 'admin_boost',
                     auth: 'ZarechyeMax2024',
