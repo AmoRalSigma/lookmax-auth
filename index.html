@@ -585,7 +585,7 @@
 <div id="toast"></div>
 
 <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwMKv9ljOlQXxFQVAZcuF8EYcrBRCIWRQn9YkRb2eF8nnSbr61fFBff246GOMsngn9hhg/exec";
+    const SCRIPT_URL = "https://lookmax-backend.arnoproducer.workers.dev";
     
     let candidates = [];
     let votes = [];
@@ -606,8 +606,8 @@
             return trimmed;
         }
         // Если это имя файла, превращаем в GitHub ссылку
-        // Файлы лежат прямо в корне репозитория 'arnopon/Looxmax'
-        return `https://raw.githubusercontent.com/arnopon/Looxmax/main/${trimmed}`;
+        // Файлы в корне репозитория ZsLooxmax
+        return `https://raw.githubusercontent.com/ZsLooxmax/Looxmax/main/${trimmed}`;
     }
 
     function showToast(m) {
@@ -870,7 +870,7 @@
         });
 
         try {
-            await fetch(SCRIPT_URL, {
+            const res = await fetch(SCRIPT_URL, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -883,10 +883,12 @@
                     rating: r 
                 })
             });
-            
-            showToast("Голос учтен!");
-            
-            // Через 2 секунды возвращаем кнопкам рабочий вид
+            if (res.ok) {
+                showToast("Голос учтен!");
+                await sync();
+            } else {
+                showToast("Ошибка связи");
+            }
             setTimeout(() => {
                 buttons.forEach(btn => {
                     btn.disabled = false;
@@ -894,9 +896,13 @@
                     btn.style.cursor = "pointer";
                 });
             }, 2000);
-
         } catch (e) {
             showToast("Ошибка связи");
+            buttons.forEach(btn => {
+                btn.disabled = false;
+                btn.style.opacity = "1";
+                btn.style.cursor = "pointer";
+            });
         }
     }
 
@@ -912,21 +918,30 @@
         if (!val) return;
 
         lastCommentTime = now;
-        fetch(SCRIPT_URL, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ 
-                type: 'comment', 
-                targetId: tid, 
-                userName: currentNick, 
-                userEmail: userEmail,
-                text: val 
-            })
-        });
-        inp.value = "";
-        showToast("Отправлено");
+        try {
+            const res = await fetch(SCRIPT_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ 
+                    type: 'comment', 
+                    targetId: tid, 
+                    userName: currentNick, 
+                    userEmail: userEmail,
+                    text: val 
+                })
+            });
+            inp.value = "";
+            if (res.ok) {
+                showToast("Отправлено");
+                await sync();
+            } else {
+                showToast("Ошибка отправки");
+            }
+        } catch (e) {
+            showToast("Ошибка отправки");
+        }
     }
 
     async function sendModalComment(tid) {
@@ -944,7 +959,7 @@
         lastCommentTime = now;
         
         try {
-            await fetch(SCRIPT_URL, {
+            const res = await fetch(SCRIPT_URL, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -957,25 +972,23 @@
                     text: val 
                 })
             });
-            
             inp.value = "";
-            showToast("Комментарий отправлен!");
-            
-            // Мгновенно добавляем комментарий в список без перезагрузки
-            const commentsList = document.getElementById(`modal-comments-${tid}`);
-            if (commentsList) {
-                const emptyMsg = commentsList.querySelector('div[style*="color: var(--gray)"]');
-                if (emptyMsg) emptyMsg.remove();
-                
-                const newComment = document.createElement('div');
-                newComment.className = 'modal-comment-item';
-                newComment.innerHTML = `<b>${currentNick}:</b> ${val}`;
-                commentsList.appendChild(newComment);
-                commentsList.scrollTop = commentsList.scrollHeight;
+            if (res.ok) {
+                showToast("Комментарий отправлен!");
+                const commentsList = document.getElementById(`modal-comments-${tid}`);
+                if (commentsList) {
+                    const emptyMsg = commentsList.querySelector('div[style*="color: var(--gray)"]');
+                    if (emptyMsg) emptyMsg.remove();
+                    const newComment = document.createElement('div');
+                    newComment.className = 'modal-comment-item';
+                    newComment.innerHTML = `<b>${currentNick}:</b> ${val}`;
+                    commentsList.appendChild(newComment);
+                    commentsList.scrollTop = commentsList.scrollHeight;
+                }
+                await sync();
+            } else {
+                showToast("Ошибка отправки");
             }
-            
-            // Обновляем данные через небольшую задержку для синхронизации
-            setTimeout(() => sync(), 1000);
         } catch (e) {
             showToast("Ошибка отправки");
         }
@@ -1038,7 +1051,6 @@
 
     window.addEventListener('hashchange', handleHashChange);
     sync();
-    setInterval(sync, 4000);
 </script>
 
 </body>
